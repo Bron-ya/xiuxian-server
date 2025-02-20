@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -49,6 +50,15 @@ public class WebSecurityConfig {
     @Resource
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(List.of(
+            applicationContext.getBean(GiteeAuthenticationProvider.class),
+            applicationContext.getBean(UserNameAuthenticationProvider.class),
+            applicationContext.getBean(SmsAuthenticationProvider.class)
+        ));
+    }
+
     /**
      * 用户登录过滤链
      */
@@ -61,7 +71,8 @@ public class WebSecurityConfig {
         http.securityMatcher("/user/login/*");
         // 对以上路径的设定
         http.authorizeHttpRequests(authorize -> authorize
-                // 都需要经过认证
+                .requestMatchers("/user/login/gitee1").permitAll()
+                // 其他登录请求需要经过认证
                 .anyRequest().authenticated()
         );
 
