@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用第三方应用授权</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      line-height: 1.6;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>欢迎使用 Gitee 第三方应用授权</h1>
+  <p>温馨提示：点击授权即可畅享当前内容 !</p>
+  <button id="gitee-login">Gitee授权登录</button>
+</div>
+<script>
+  // 用户进行点击确认使用 gitee 进行授权
+  document.getElementById('gitee-login').addEventListener('click', function() {
+    // 将以下地址获取过来的信息转为 json 形式
+    fetch('http://localhost:8081/login/gitee/config')
+    .then(response => response.json())
+    .then(data => {
+      const clientId = data.data.clientId;
+      const redirectUri = data.data.redirectUri;
+      // 将获取到的 json 信息传入以下地址
+      // 使浏览器重定向到构建好的Gitee OAuth授权URL，用户可以在此页面同意或拒绝应用的权限请求
+      window.location.href = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+    })
+    .catch(error => console.error('Error:', error));
+  });
+</script>
+</body>
+</html>

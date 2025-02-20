@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xx.xiuxianserver.Mapper.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.xx.xiuxianserver.Entity.Menu">
+    <!--@mbg.generated-->
+    <!--@Table menu-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="permit" jdbcType="VARCHAR" property="permit" />
+    <result column="is_deleted" jdbcType="BOOLEAN" property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id,
+    `name`,
+    permit,
+    is_deleted,
+    create_time,
+    edit_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from menu
+    where id = #{id,jdbcType=INTEGER}
+      and is_deleted = 0
+  </select>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xx.xiuxianserver.Entity.Menu" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="permit != null">
+        permit,
+      </if>
+      <if test="deleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="permit != null">
+        #{permit,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xx.xiuxianserver.Entity.Menu">
+    <!--@mbg.generated-->
+    update menu
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="permit != null">
+        permit = #{permit,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        is_deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xx.xiuxianserver.Entity.Menu">
+    <!--@mbg.generated-->
+    update menu
+    set `name` = #{name,jdbcType=VARCHAR},
+        permit = #{permit,jdbcType=VARCHAR},
+        is_deleted = #{deleted,jdbcType=BOOLEAN},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMenuByUserId" resultType="java.lang.String">
+    select
+    permit
+    from menu
+    where is_deleted = 0 and id in (
+    select menu_id
+    from role_menu
+    where is_deleted = 0 and role_id in (
+      select role_id
+      from user_role
+      where is_deleted = 0 and user_id = #{userId,jdbcType=INTEGER}
+    )
+    )
+  </select>
+</mapper>

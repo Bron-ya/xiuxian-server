@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xx.xiuxianserver.Mapper.UserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.xx.xiuxianserver.Entity.UserRole">
+    <!--@mbg.generated-->
+    <!--@Table user_role-->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="is_deleted" jdbcType="BOOLEAN" property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id,
+    role_id,
+    is_deleted,
+    create_time,
+    edit_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from user_role
+    where user_id = #{userId,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+      and is_deleted = 0
+  </select>
+  <insert id="insertSelective" parameterType="com.xx.xiuxianserver.Entity.UserRole">
+    <!--@mbg.generated-->
+    insert into user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="deleted != null">
+        is_deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="editTime != null">
+        edit_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xx.xiuxianserver.Entity.UserRole">
+    <!--@mbg.generated-->
+    update user_role
+    <set>
+      <if test="deleted != null">
+        is_deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="editTime != null">
+        edit_time = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xx.xiuxianserver.Entity.UserRole">
+    <!--@mbg.generated-->
+    update user_role
+      set is_deleted = #{deleted,jdbcType=BOOLEAN},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectRoleIdByUserId" resultType="int">
+    select
+    role_id
+    from user_role
+    where user_id = #{userId,jdbcType=INTEGER}
+      and is_deleted = 0
+  </select>
+</mapper>
